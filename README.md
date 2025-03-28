@@ -160,15 +160,63 @@
 
 - To caculate CIDR Blocks :
 
- - IP Calculator: https://mxtoolbox.com/subnetcalculator.aspx
-   
- - IP Calculator with binary values: http://jodies.de/ipcalc
-   
- - Calculate sub-CIDR blocks: http://www.davidc.net/sites/default/subnets/subnets.html
+  - IP Calculator: https://mxtoolbox.com/subnetcalculator.aspx
+    
+  - IP Calculator with binary values: http://jodies.de/ipcalc
+    
+  - Calculate sub-CIDR blocks: http://www.davidc.net/sites/default/subnets/subnets.html
 
 ## EC2 | Virtual Cloud Server 
 
-- 
+- EC2 Stand for Elastic Compute Cloud . This is a Server that running in one of Amazon's Data Center . EC2 is categorized under Compute Category bcs It is a Service that provide Compute Capacity
+
+#### Deploy Web App on EC2 Intances 
+
+- Step 1: Create EC2 Instance
+
+  - Click Launch Instance
+ 
+  - Give it a Name
+ 
+    - Additional to Name : Meta data as key-value pair . Infomation about what type of server this is . Any key-value pair that I want . Which is helpful when I have alot of Instances for filtering them out or in billing to see whar resources cost me how much and so on ...
+   
+    - I also can add Tag to all Components on AWS . It help me filter different type of Resources with the same text .
+   
+  - Select OS Image and Application
+ 
+    - I have a list of Type for each Instances . Basically Each Instance is configurable with different Resources Size (CPU, RAM, Storage, Network Performence)
+   
+  - Key pair (Login)
+ 
+    - In order to SSH to Instances I have to choose key pair for my Instances . I can create key pair on AWS and then I can dowload Private Key locallly and the Public key automatically store by AWS
+   
+    - I can create new one per Instance
+   
+    - If on Mac or Linux choose .pem . If on Window choose .ppk
+   
+  - Network Setting :
+ 
+    - I have VPC . Default VPC allocated by AWS . If I have multiple VPC I can choose which VPC I can start my Instance in
+   
+    - I also have Subnet . Each Region have 1 to 5 Availability Zone = Subnet depend on that Region .
+    
+    - I can choose any Subnet in that VPC to start and this make sense bcs if I configured my Subnet differently . For example I have configure Firewall rule each Subnet differently . Maybe I don't allow Traffic to one Subnet at all make it Private Subnet ... etc
+   
+    - I also can Assign Public IP address . If it enable , After Instance created it will get Public IP address also Private IP address .
+   
+    - I also can Configuring Security Group (Firewall Rule) . Each Subnet can have it's own Firewall rules  where I decide what traffic I allow on which Port (Subnet level = NACL Network Access Control List) . Or the Alternative I can define the Fire Rule on Instances Level (Security Group)
+   
+    - To be more Secure . I only allow my IP address (or a set of IP Address) to SSH to the Instance 
+
+  - Configure Storage
+ 
+- Step 2 : Connect to a Server via SSH
+
+- Step 3 : Install Docker on EC2
+
+- Step 4 : Run Docker Container (Docker login, pull, run) from Private Repo
+
+- Step 5 : Configure EC2 Firewall to access App externally from browser 
 
 
 
