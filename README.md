@@ -145,3 +145,50 @@
 ----Security Group----
 
 - Control Traffic on Instances Level
+
+## CIDR Block | Classes Inter-Domain Routing 
+
+- CIDR Block is a Range of IP Address . Normal IP address look like this `172.31.32.0` . With CIDR Block is like this `172.31.32.0/20`, a `/20` is basically would give that a Range instead of just have 1 IP Address
+
+#### How to choose a CIDR Block ?
+
+- IP Address represented as a binary digits and there is exact 32 of those digits . 
+
+- Depend on how many IP Addresses I want in my VPC, I can decide how to set a Range .
+
+- Once I have overall Range for VPC then I can give Subnet inside the VPC subCDIR blocks
+
+- To caculate CIDR Blocks :
+
+ - IP Calculator: https://mxtoolbox.com/subnetcalculator.aspx
+   
+ - IP Calculator with binary values: http://jodies.de/ipcalc
+   
+ - Calculate sub-CIDR blocks: http://www.davidc.net/sites/default/subnets/subnets.html
+
+## EC2 | Virtual Cloud Server 
+
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
