@@ -70,16 +70,19 @@
 
 ## Region and Availibility Zone 
 
+- Cloud Provider have physical center where all the Server Running .
 
+- Data Center all over the world
 
+- Most of Platform (AWS, Google Cloud, Micorsoft) have datacenter distributed all over the world in something called Regions .
 
+- Regions are Physical Localtion where data center are Clustered (London, Sanfrancisco, Singapore ....)
 
+- Whenever I create Virtual Machine (EC2) in AWS or other platform I have to choose Region . Which Region my Virtual Machine should be coming from .
 
+- AWS also offer backup, reliability, replication for my Infrastructure . Let's say I have some complex project and I spend a lot of time and invested a lot of time to set up a complex Infrastructure on AWS . I have configured all this stuff and this is all running in 1 Region, If something happen to that Data Center I may lose my data . In order to ensure against that in these Region AWS has multiple Data Center
 
-
-
-
-
+- Availability Zone = 1 or more discrete Data Center 
 
 ## Virtual Private Cloud (VPC)
 
