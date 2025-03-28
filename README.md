@@ -218,9 +218,47 @@
 
 - Step 3 : Install Docker on EC2
 
+  - First I need to check my Package Manager tool for any update . Always I need to run Update for my Package Manager Tools `sudo yum update`
+
+  - Install Docker : `sudo yum install docker`
+ 
+  - Start Docker Daemon : `sudo service docker start` . I have to start Docker before pull Image , Run container etc ...
+ 
+    - Docker Daemon is the core engine behind Docker . It's background process that run on my host system and handle heavy lifting of building, running and managing Docker Container .
+   
+      - Listen for Docker API (CLI or tools)
+     
+      - Build and Run container
+     
+      - Manage Image, Network and Volume
+     
+      - Communicate with Docker Registry like Dockerhub to pull and push Image
+
+    - I want to able to execute Docker Command with sudo . In order to do that I need to add EC2 User (which is my EC2 Intances User) to Docker Group : `sudo usermod -aG docker $USER` . Then I need to exit and SSH again for it to effect 
+   
+      - $USER is stand for current User   
+   
 - Step 4 : Run Docker Container (Docker login, pull, run) from Private Repo
 
-- Step 5 : Configure EC2 Firewall to access App externally from browser 
+  -  Login to Docker Hub to get Image : `docker login` . Docker hub is a default so I don't need to provide Docker URL . If I have Nexus or ECR I need to provide URL of those Repo
+ 
+  -  Locally it will create hidden file .docker/config.json . This config.json file auto generate when I do `docker login` . This will now hold Credentials or Authentication Token to a Docker Repository so I don't need to repeatedly provide username and password everytime I login 
+ 
+  - Pull Docker Image : `docker pull <repo-name/image-name:tag>` . To check Image available : `docker images`
+ 
+  - Run Container : `docker run -p 3000:3080 <image-name> -d` . To check Container running : `docker ps`
+ 
+    - Port 3000 : Bind Port 3000 on EC2 Server 
+   
+    - Port 3080 : Is where my Application is running  
+
+- Step 5 : Configure EC2 Firewall to access App externally from browser
+
+  -  My Instance has a Security Group attached to it that I created in Step 1 which has Firewall Rule Configure . So now I need to open a Port 3000 so the Request coming from the Browser acutally enter my instances at port 3000
+ 
+  -  Inbound Rule are coming into my Server
+ 
+  -  Outbond Rule are traffic rule leaving the Server . Like I did `yum update`, `yum install docker` . This is  all traffic goes outside to the internet in order to fetch those tool from the Internet .
 
 
 #### EC2 Dashboard Overview 
