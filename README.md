@@ -212,12 +212,34 @@
  
 - Step 2 : Connect to a Server via SSH
 
+  - Save the `.pem` file to more secure location . Move to .ssh folder `mv .pem ~/.ssh/` . And then I change Permission of that file to make a Permission Stricter `chmod 400 .pem`.
+ 
+  - Get Public IP Address of my Instance so I can connect to it . And I need to SSH to a Instance as EC2 user not a root User (Which is as a default): `ssh -i <pem-file> ec2-user@<public-ip-adress>`
+
 - Step 3 : Install Docker on EC2
 
 - Step 4 : Run Docker Container (Docker login, pull, run) from Private Repo
 
 - Step 5 : Configure EC2 Firewall to access App externally from browser 
 
+
+#### EC2 Dashboard Overview 
+
+- In Detail : I have Instance ID , Instance State, Subnet, Private and Public IP Address , DNS name for Private and Public IP Address 
+
+  - Private IP Address is for Components inside VPC to communicate
+ 
+  - Public IP Address is for allow me to SSH into it and then access my Application through the Browser
+ 
+- In Security : I have Security Group and all the Firewall Rule that applied to my Instance
+
+- Networking : I have Public and Private IP , Subnet ID, Availability Zone
+
+- Storage
+
+- Status Check
+
+- Tags : I can add new tag 
 
 
 
