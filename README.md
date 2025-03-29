@@ -441,6 +441,33 @@
 
 #### Replace Docker Image with newly built Version
 
+- In Docker-compose the Image is hardcode . However when I produce Application I alway produce a new Version
+
+- Suppose I am bulding another version of Image and I need to pass that Information or the Image Name to the Docker-Compose and replace the whole Image name in Docker Compose . In Docker Compose instead of hardcode image I will set it as a Variable : `${IMAGE_NAME}` . This Docker-compose file is actually called by server command shell script . In the Shell Script file before I execute Docker-compose CMD I will export the Image variable as a ENV `export IMAGE=xxx` and set it to a value that represent the Image name in Jenkinfile.
+
+- So how do the Image variable in shell script file get Image Name value in Jenkinfile ?
+
+  - I will pass the value to shell script file as a Parameter. I can set a parameter after Shell Script cmd and I can pass multiple Parameter to a shell script by just listing them and read those Parameter . In this case the Parameter I want to set is IMAGE variable . In Jenkinsfile I will pass value like this : `def shellCMD = "bash ./server-cmds.sh ${IMAGE_IMAGE}"` and in Shell script file I set : `export IMAGE=$1` (1 for the first parameter) .
+ 
+----Wrap up----
+
+- I have the Image as a ENV in Jenkinfile and passing on to Shell Script via Parameter . And a Shell Script read that Parameter via $1 and set the variable as Image and export ENV on EC2 . Now this ENV will be set on EC2 Server bcs this whole shell script get execute on the EC2 remote Server And then execute the docker-compse cmd with the ENV set in EC2
+
+- This is what Jenkinfile look like :
+
+ <img width="600" alt="Screenshot 2025-03-29 at 12 11 31" src="https://github.com/user-attachments/assets/eaf41bbc-f3e1-48cc-9245-ea3093c05812" />
+
+- This is what Docker-compose Look like :
+
+<img width="600" alt="Screenshot 2025-03-29 at 12 12 12" src="https://github.com/user-attachments/assets/2502f2ca-b282-441f-9cae-9cbd40f1460b" />
+
+- This is what shell script look like :
+
+<img width="600" alt="Screenshot 2025-03-29 at 12 13 17" src="https://github.com/user-attachments/assets/3a630417-c650-495f-9f75-a3802298b668" />
+
+
+
+
 
 
 
