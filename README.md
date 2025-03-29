@@ -466,8 +466,54 @@
 <img width="600" alt="Screenshot 2025-03-29 at 12 13 17" src="https://github.com/user-attachments/assets/3a630417-c650-495f-9f75-a3802298b668" />
 
 
+#### Set Image Name dynamically in Jenkinfile 
+
+- Add the Increment Version Stage
+
+- I will call this mvn command : `sh 'mvn build-helper:parse-version versions:set -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} versions:commit'` . That increment the version in Pom.xml
+
+- and then I will read that version from pom.xml and extract that value and set it in a variable :
+  
+  ```
+  def matcher = readFile('pom.xml') =~ <version>(.+)</version>
+  def version = matcher[0][1]
+  ```
+
+- and then I will set Image name from that version as a  ENV : `env.IMAGE_NAME = "nguyenmanhtrinh/demo-app:$version-$BUILD_NUMBER"`
+
+#### Commit version update Stage 
+
+- Add commit version update Stage right after the deploy stage .
+
+- This step the same in Jenkins module 
+
+```
+stage('commit version update'){
+    steps {
+        script {
+            withCredentials([usernamePassword(credentialsId: 'github-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]){
+                sh 'git remote set-url origin https://$USER:$PASS@github.com/nguyenmanhtrinh/java-maven-app.git'
+                sh 'git add .'
+                sh 'git commit -m "ci: version bump"'
+                sh 'git push origin HEAD:jenkins-jobs'
+            }
+        }
+    }
+}
+```
+
+#### This is how real project are built 
+
+<img width="600" alt="Screenshot 2025-03-29 at 12 55 36" src="https://github.com/user-attachments/assets/c1372ac6-92a6-42b4-818a-b5d8cea6790e" />
+
+----Summary----
+
+- First Increment the Version which give me a new (or next) version Docker Image -> Then Build Application Jar using that Version -> Then I will use Jar file the build Docker Image with the Image set in the Increment version stage and push that Image to Repository -> And then will deploy Docker-Compose file the new Image version set dynamically -> Then I connect to EC2 using sshagent, copy docker-compose to ec2 and execute docker-compose on the server -> Once success Deploy I will committing the change with the change of version increment
 
 
+- !!!NOTE : If the Stage fail the rest will be skip
+
+- For more advance use case is Docker-compose isn't enough to manage my container . I gonna need to container Orchestration tools and deploy to that Orchestration tool then will look different than just using sshagent plugin 
 
 
 
