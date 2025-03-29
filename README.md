@@ -411,8 +411,25 @@
   - I will set docker-compose command in a variable : `def dockerComposeCMD = docker-compose -f docker-compose.yaml up --detach` . Then I will set it in the sshAgent where the ssh connect to EC2 : `"ssh ec2-user@public-ip-address ${dockerComposeCMD}"`
 
 
+  - The whole set up look like this  
+
+  <img width="600" alt="Screenshot 2025-03-29 at 11 24 23" src="https://github.com/user-attachments/assets/b216cdc5-304b-4a8a-8407-d71a9cae6a08" />
 
 
+#### Extract to Shell Script 
+
+- What if I want to execute multiple command once I connect to EC2 Server . What if I need to set some variable before execute docker-compose command or what if I have other command to execute before
+
+- I Can execute multiple Command by grouping them into a shell script and execute the shell script from Jenkin
+
+- I will create shell file `server-cmds.sh`
+
+ ```
+ #!/usr/bin/env bash
+
+ docker-compose -f docker-compose.yaml up --detach
+ echo "Success"
+ ```
 
 
 
