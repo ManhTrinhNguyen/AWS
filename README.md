@@ -234,7 +234,7 @@
      
       - Communicate with Docker Registry like Dockerhub to pull and push Image
 
-    - I want to able to execute Docker Command with sudo . In order to do that I need to add EC2 User (which is my EC2 Intances User) to Docker Group : `sudo usermod -aG docker $USER` . Then I need to exit and SSH again for it to effect 
+    - I want to able to execute Docker Command without sudo . In order to do that I need to add EC2 User (which is my EC2 Intances User) to Docker Group : `sudo usermod -aG docker $USER` . Then I need to exit and SSH again for it to effect 
    
       - $USER is stand for current User   
    
