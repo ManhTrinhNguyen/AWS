@@ -431,6 +431,15 @@
  echo "Success"
  ```
 
+- In Jenkinfile I will put execute shell command into Variable : `def shellCMD = 'bash ./server-cmds.sh'`
+
+- I will copy the script file to EC2 : Inside sshAgent block : `sh "scp server-cmds.sh ec2-user@<public-ip-address>:/home/ec2-user"` and then run it on EC2 : `"ssh ec2-user@public-ip-address ${shellCMD}"`
+
+- The whole code look like this :
+
+<img width="600" alt="Screenshot 2025-03-29 at 11 42 18" src="https://github.com/user-attachments/assets/ac0d55d4-9a54-4425-bc6d-67b5cec16380" />
+
+#### Replace Docker Image with newly built Version
 
 
 
