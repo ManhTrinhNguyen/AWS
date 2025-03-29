@@ -279,8 +279,59 @@
 
 - Tags : I can add new tag 
 
+## Deploy to EC2 Server from Jenkins Pipeline CI/CD 
 
+#### Overview
 
+- Connect to EC2 server Instance from Jenkins Server via SSH (ssh agent)
+
+- Execute Docker command on that Server 
+
+#### Install SSH Agent Plugin and Create SSH Credential Type 
+
+- Go to Manage Jenkins -> Plugin -> SSH Agent
+
+- Create SSH Credential
+
+  - I need to make .pem file from local also available in Jenkin
+ 
+  - Go to Multi Branch Pipeline -> Credentials -> Select SSH Username with Private Key -> Get the content from .pem file and add it into Private in Jenkin
+ 
+#### Jenkinfile Syntax for a Plugin 
+
+- There is a way in Jenkin of seeing pipeline syntax or Jenkinfile syntax : Go to Multi branch Pipeline -> Select Pipeline Syntax -> In the Sample Step I can choose diffent steps that I want to configure -> This case I choose ssh agent -> then I will have a list of credentials available for this project
+
+#### Jenkinfile | Connect to EC2 and run Docker command 
+
+ ```
+ stage("deploy") {
+    steps {
+        script {
+            echo 'deploying docker image to EC2...'
+
+            dockerCMD = 'docker run -p 3000:3080 nguyenmanhtrinhrepo/demo-app:1.0'
+
+            sshagent(['ec2-server-key']) {
+              sh "ssh ec2-user@public-ip-address ${dockerCMD}"
+            }
+        }
+    }               
+}
+
+ ```
+- In deploy Step I will paste in the generated syntax from above example
+
+  - SSH to the Instance: `sh 'ssh ec2-user@public-ip-address'` . In addition to that I need to depress the pop up bcs this is not a interactive mode: `sh 'ssh -o StrictHostKeyChecking=no ec2-user@public-ip-address'`
+ 
+  - Passing on Docker command as a last Parameter -> Put docker run command into a variable `def dockerCMD = 'docker run -p 3000:3080 nguyenmanhtrinhrepo/demo-app:1.0'` -> And then put the var into the ssh command `sh "ssh ec2-user@public-ip-address ${dockerCMD}"` . Before this step I have to have `docker login` executed in EC2
+ 
+#### Configure Firewall rule on EC2 
+
+- I need to give Jenkins Server's IP address Permission to connect to EC2 Instances
+
+- Go to Security -> Add Ip Address of Jenkins to Port 22 .
+
+- Also Open the Port 3000 . This is the Port where Application will be accessible at so I can access it from the Browser 
 
 
 
