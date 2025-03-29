@@ -331,9 +331,84 @@
 
 - Go to Security -> Add Ip Address of Jenkins to Port 22 .
 
-- Also Open the Port 3000 . This is the Port where Application will be accessible at so I can access it from the Browser 
+- Also Open the Port 3000 . This is the Port where Application will be accessible at so I can access it from the Browser
+
+#### Executing complete Pipeline 
+
+- I have a Jenkinsfile that
+
+  - Using a Share Library : This Share Library contain all of the function for bulding the Jar of the Maven Application and then building the Docker Image
+ 
+  ```
+  library identifier: 'jenkins-shared-library@master', retriever: modernSCM(
+    [$class: 'GitSCMSource',
+    remote: 'https://gitlab.com/twn-devops-bootcamp/latest/09-aws/jenkins-shared-library.git',
+    credentialsID: 'gitlab-credentials'
+    ]
+  )
+  ```
+
+  - In the Pipeline I define an ENV with Image Name :
+
+  ```
+  environment {
+    IMAGE_NAME = 'nguyenmanhtrinh/demo-app:java-maven-1.0'
+  }
+  ```
+
+  - In Build Jar Stage I have `buildJar()` function from Share Lib to build the Jar file
+ 
+  - In Build Image Stage I have Build image, dockerLogin, dockerPush function to build an Image
+ 
+  - In the deploy Stage I have used ssh agent to ssh to EC2 . And Run the Docker Container from there
+ 
+#### Notes 
+
+- This approach using the ssh agent plugin is applicable for all the Servers (EC2, Digital, Linode ...)
+
+- This just a basic simple step to run Docker container from Jenkins : For Smaller Project
+
+- More complex set up to deploy Container I would use Kubernetes
 
 
+#### Using docker-compse 
+
+- Maybe I have 5 containers for my Applications and all of this define in Docker-compose file . In this case I could also use SSH-Agent, What I could do is basically from Git Repo that connected to Pipeline Job just take docker-compose file copy that to the Server once I ssh into it and then execute docker-compose command on the server
+
+- Project Setup in my Repo I will have Docker Compose yaml file that define all the container need to run for the Application then I can start container with command `docker-compose -f docker-compose.yaml up`
+
+- Step 1 : Install docker compose on EC2
+
+  - Docker-compose is not in yum package . I will use `curl` command that I use which is gonna download the latest version of docker compose to the local file system : `sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose` . And then I make it executable : `sudo chmod +x /usr/local/bin/docker-compose` 
+
+- Step 2 : Create Docker compose Yaml file for my Application
+
+  ```
+  version: '3.8'
+  services:
+     java-maven-app:
+        image: ${IMAGE}
+        ports:
+          - 8080:8080
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        environment:
+          - POSTGRES_PASSWORD=my-pwd
+  ```
+
+- Step 3 : Adjust Jenkinfile to execute docker-compose command on EC2 Instance
+
+  - I need to have docker-compose file in EC2 Instance . I will copy docker-compose file from Git Repo to EC2 Instance
+ 
+  - In sshAgent Block : `sh "scp docker-compose.yaml ec2-user@<public-ip-address>:/home/ec2-user"`. This is will execute on Jenkin and Jenkin before running all these Stages will check out the Repository so Jenkin Server has access to the file in the Repository   
+
+    - ec2-user@<public-ip-address> : This is the remote server that docker-compose.yaml get copied to
+   
+    - :/home/ec2-user : This is where the docker-compse.yaml get copied to (inside the EC2)
+
+  - I will set docker-compose command in a variable : `def dockerComposeCMD = docker-compose -f docker-compose.yaml up --detach` . Then I will set it in the sshAgent where the ssh connect to EC2 : `"ssh ec2-user@public-ip-address ${dockerComposeCMD}"`
 
 
 
