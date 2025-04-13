@@ -591,15 +591,31 @@ To create SG : `aws ec2 create-security-group --group-name my-sg --description "
 
 To list 1 specific SG : `aws ec2 describe-security-groups --group-ids <sg-id>`
 
-Configure SG to allow SSH via port 22 : `aws ec2 authorize-security-group-ingress --group-id <sg-id> --protocol tcp --port 22 --cidr <ip-range-value>`
+Configure SG to allow SSH via port 22 : `aws ec2 authorize-security-group-ingress --group-id <sg-id> --protocol tcp --port 22 --cidr <ip-range-value>` . By default SG has the outbound permission to all the destinations . 
+
+#### Create Key-Pair 
+
+To create key-pair : `aws ec2 create-key-pair --key-name MyKpCli --query 'KeyMaterial' --output text > MyKpCLI.pem`
+
+ - `--query` : This is picking the specific attributes and values from the created the generated key pair . There are a couple of values that I can see in the command line options if I do `aws ec2 create-key-pair help` . I will take the KeyMarterial
+
+ - `--output text > MyKpCLI.pem` : With these options we are going to get back an unencrypted content of the keys pair and I want to save it and store it locally into PEM file 
  
- 
+#### Create EC2 Instance 
 
+Get Subnet-id `aws ec2 describe-subnets` . 
 
+```
+aws ec2 run-intances \\
+--image-id ami-xxxxx \\ 
+--count 1 \\  
+--instance-type t2.micro \\ 
+--key-name MyKpCLI \\ 
+--security-group-ids sg-xxxx \\ 
+--subnet-id subnet-xxxxx 
+```
 
-
-
-
+- In order to ssh to intances I need first change Permission of the .pem file : `chmod 400 ~/<.pem>`
 
 
 
