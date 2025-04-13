@@ -617,20 +617,95 @@ aws ec2 run-intances \\
 
 - In order to ssh to intances I need first change Permission of the .pem file : `chmod 400 ~/<.pem>`
 
+## AWS CLI 2
 
+#### Filter and Query 
 
+On the `aws ec2 describe-instances` command I can add filter `aws ec2 describe-instances --filters` . This applies for any component, not just EC2 
 
+In addition to that I can also do `query` . Query are filtering what attributes or what information of that filtered result components get displayed 
 
+So Filter pick Components, Query pick specific attributes of those Components that will be displayed
 
+Example : `aws ec2 describe-instances --filters "Name=instance-type,Values=t2.micro" --query "Reservations[].Instances[].InstanceId"` . 
 
+ - `aws ec2 desctibe-instances` : List all the EC2 Instances
 
+ - `--filters "Name=instance-type,Values=t2.micro"` : filter out the name of Instance and Values of instance . All of EC2 instances have t2.micro will be filtered .
 
+   - `"Name=instance-type,Values=t2.micro"` : This Name Value could be anything . Could be Instance ID itself, could be the subnet, secret group etc ... and also can be a tag . For example :
 
+   - `"Name=tag:Type,Values=web-server-with-docker"` : So this value have a tag call Type with a Value web-server-with-docker and if I execute it we get that component with all the information relate to that component
 
+ - `--query "Reservations[].Instances[].InstanceId"` . Then from the result for each component we get alot of metadata and a lot of component specific data, I just want to see the `InstanceId`
 
+#### Using IAM command | Create User, Group and assign permissions 
 
+To create a Group : `aws iam create-group --group-name MyGroupCli` . After execute we have
 
+ - GroupName
 
+ - GoupID
+
+ - Arn : stand for Amazon resource name . This is basically to uniquely identify a component or a resource that we create in AWS . And IAM policies, users groups are one of the many resources that get assigned this unique Identifier . Basically consider as a additional ID accross all AWS accrount .
+
+To create user : `aws iam create-user --user-name MyUserCli` . I have information the same as the Group 
+
+To add User to Group : `aws iam add-user-to-group --user-name MyUserCli --group-name MyGroupCli`
+
+To get the group : `aws iam get-group --group-name MyGroupCli` 
+
+Give Group and User Permission for the EC2 Service : `aws iam attach-group-policy <policy-arn>` . I need a Policy identifier (ARN) 
+
+If I know the name and want to get its ARN : `aws iam list-policies --query 'Policies[?PolicyName==`AmazonEc2FullAccess`].Arn' --output text`
+
+To validate : `aws iam list-attached-group-policies --group-name MyGroupCli`
+
+#### Create Credentials for new User 
+
+Create User to sign in or login via UI, and give this user programmatic access additionally once user created 
+
+To login via UI my User need Password : `aws iam create-login-profile --user-name MyUserCLI --password MyPassword --password-reset-required`
+
+   - Describe user to get User-id : `aws iam get-user --user-name MyUserCli`
+
+   - The User need iam:ChangePassword permission in order to perform change Password 
+
+Also I want User to be able to execute AWS command on CLI so I will assign its key pair 
+
+#### Create Policy and assign to Group 
+
+I need to give user Change Password Permission explicitly .
+
+I need JSON file that define the set of permissions in that Policy 
+
+<img width="554" alt="Screenshot 2025-04-13 at 11 54 16" src="https://github.com/user-attachments/assets/ba846d08-aec7-452b-89df-418a7fe57b0b" />
+
+Create Json file : `vim changePwdPolicy.json` and paste the file above in there 
+
+To create Policy : `aws iam create-policy --policy-name changePwd --policy-document file://changePwdPolicy.json`
+
+Attach policy to User Group : `aws iam attach-group-policy --group-name MyGroupCLI --policy-arn <policy-arn>` . Now User should have Change Password Permission as well 
+
+#### Create Access Keys for a new User 
+
+To create Access Key : `aws iam create-access-key --user-name MyUserCli`
+
+  - In the output I will see access key Id and secret Access key
+
+#### Switch AWS Users for AWS CLI commands 
+
+This is useful if I have multiple AWS user and I need to switch between them . I need to change the current user that is configured for AWS commands by using `aws configure` 
+
+There is 2 way to Change AWS User 
+
+ - Excute `aws configure` again and put Access key and Secret Access key of that User . This will change the default of User for all following command . `aws configure set aws_access_key_id <access_key_id> set aws_access_secret_key <access_secret_key>`
+
+ - If I don't want to override the default value . I can do that by setting ENV `export AWS_ACCESS_KEY_ID=<access_key_id>` and `export AWS_SECRET_ACCESS_KEY=<aws_secret_access_key>` and `export AWS_DEFAULT_REGION=<any_Region>`
+
+#### Cleanup AWS
+
+I can check out the delete command : `aws ec2 <any nonsense>` will show me a list of subcommand
 
 
 
