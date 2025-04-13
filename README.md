@@ -515,6 +515,99 @@ stage('commit version update'){
 
 - For more advance use case is Docker-compose isn't enough to manage my container . I gonna need to container Orchestration tools and deploy to that Orchestration tool then will look different than just using sshagent plugin 
 
+## AWS CLI-1 
+
+#### Introduction 
+
+I can use CLI to write script or want to execute commands that create some service, like EC2 instance on AWS . For that there is AWS CLI 
+
+AWS CLI include commands for every service and every service component on AWS . 
+
+I can work much faster and more effiently using AWS CLI
+
+#### Install and Configure AWS Command Line Tool 
+
+For Mac OS : `brew install awscli`
+
+Configure AWS CLI to connect to AWS Account using one of the users (I have Admin user) 
+
+ - For UI access I have configured a Password for that user
+
+ - For the CLI access I have configure access key and secret access key
+
+Whenever I execute command like `aws ec2 ...` I execute that against AWS Account . But I just installed the CLI tool so our AWS CLI doesn't know where my AWS Account is or Which user I want to user I want to use 
+
+ - To get access I do `aws configure` . I should see :
+
+<img width="343" alt="Screenshot 2025-04-13 at 09 17 06" src="https://github.com/user-attachments/assets/d241c598-e888-4813-8cf9-6147cc6a2e31" />
+
+- Region is where I want to create my component in
+
+- Output format I can set it to be JSON . Bcs JSON is easy to work with
+
+- So I am executing with this Users with those Credential (Access key, and access secret key) . I create EC2 Instance in this Region and I am going to display result of the command in JSON format
+
+Now this configuration is stored locally and will be used for every AWS Command execution . Where is that infomation stored locally ? In home directory of my user when I execute `aws configure` it automatically generated `~/.aws` inside of this directory I have config and credentials . In `~/.aws/config` I have region and output configuration , in `~/.aws/credentials` I have access key and access secret key
+
+#### Command Structure 
+
+aws <command> <subcommand> [options and parameters]
+
+For every single service, there is a subset of commands 
+
+ - Example if I am doing things around EC2 service, creating the instance, creating security group, key pair configuration, those are all part of the AWS EC2 command
+
+ - For example if I do `aws ec2 <anything nonsense>` . I will get a list of ec2 subset of command for all the components that are related to EC2 . Security Group, Network Configuration etc ....
+
+ - I can do the same for `aws iam <anything nonsense>` so I can get a list of subset of command
+
+The command use to create EC2 instance : 
+
+```
+aws ec2 run-intances \\
+--image-id ami-xxxxx \\ ### Create our virtual image from  
+--count 1 \\ ### number of instances 
+--instance-type t2.micro \\ ### Instance type 
+--key-name MyKeyPair \\ ### Key name in order to SSH into that
+--security-group-ids sg-xxxx \\ ### Security group
+--subnet-id subnet-xxxxx ### subnet 
+```
+
+`--key-name` this is a .pem file that lets me SSH to the Instance . I can reuse a key pair that I already have created that is already used for some other instance, or I can create a new one . I can share among those EC2 Instances or I can have separate ones for each one of those . Same way with Security Group 
+
+`--subnet-id` I will use the existing one . In my VPC I have 3 Subnet bcs is Region has three AZ and each one has it own subnet 
+
+#### Create Security Groub 
+
+List SG available : `aws ec2 describe-security-group`
+
+In order to create new SG I need VPC ID . Bcs SG needs to be created inside a VPC
+
+To get VPC ID : `aws ec2 describe-vpcs` 
+
+To create SG : `aws ec2 create-security-group --group-name my-sg --description "My SG" --vpc-id <vpc-id>`
+
+ - Then I have a Output in Json with SG ID
+
+To list 1 specific SG : `aws ec2 describe-security-groups --group-ids <sg-id>`
+
+Configure SG to allow SSH via port 22 : `aws ec2 authorize-security-group-ingress --group-id <sg-id> --protocol tcp --port 22 --cidr <ip-range-value>`
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
