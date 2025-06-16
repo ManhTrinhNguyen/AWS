@@ -1,10 +1,42 @@
+- [IAM Manages Users Roles and Permissions](#IAM-Manages-Users-Roles-and-Permissions)
+
+- [Region and Availibility Zone](#Region-and-Availibility-Zone)
+
+- [Virtual Private Cloud VPC](#Virtual-Private-Cloud-VPC)
+
+- [CIDR Block Classes Inter-Domain Routing](#CIDR-Block-Classes-Inter-Domain-Routing)
+
+- [EC2 Virtual Cloud Server](#EC2-Virtual-Cloud-Server)
+
+- [Deploy to EC2 Server from Jenkins Pipeline CI/CD](#Deploy-to-EC2-Server-from-Jenkins-Pipeline-CI/CD)
+
+ - [Install SSH Agent Plugin and Create SSH Credential Type](#Install-SSH-Agent-Plugin-and-Create-SSH-Credential-Type)
+
+ - [Jenkinfile Syntax for a Plugin](#Jenkinfile-Syntax-for-a-Plugin)
+
+ - [Configure Firewall rule on EC2](#Configure-Firewall-rule-on-EC2)
+
+ - [Executing complete Pipeline](#Executing-complete-Pipeline)
+
+ - [Using docker-compse](#Using-docker-compse)
+
+ - [Extract to Shell Script](#Extract-to-Shell-Script)
+
+ - [Replace Docker Image with newly built Version](#Replace-Docker-Image-with-newly-built-Version)
+
+ - [Set Image Name dynamically in Jenkinfile](#Set-Image-Name-dynamically-in-Jenkinfile)
+
+ - [Commit version update Stage](#Commit-version-update-Stage)
+
+- [AWS CLI](#AWS-CLI)
+
 # AWS
 
 ## AWS Introduction 
 
 - AWS is stand for Amazon Web Services, which is a collection of many Services 
 
-## IAM - Manages Users, Roles and Permissions 
+## IAM Manages Users Roles and Permissions 
 
 - IAM (Identity and Access Managment) allow me to manage who has access to my AWS Infrastructure who can configure stuff . I can do that by creating User or User Group and then assigning them certain Permission for different Services
 
@@ -84,7 +116,7 @@
 
 - Availability Zone = 1 or more discrete Data Center 
 
-## Virtual Private Cloud (VPC)
+## Virtual Private Cloud VPC
 
 **What is VPC**
 
@@ -146,7 +178,7 @@
 
 - Control Traffic on Instances Level
 
-## CIDR Block | Classes Inter-Domain Routing 
+## CIDR Block Classes Inter-Domain Routing 
 
 - CIDR Block is a Range of IP Address . Normal IP address look like this `172.31.32.0` . With CIDR Block is like this `172.31.32.0/20`, a `/20` is basically would give that a Range instead of just have 1 IP Address
 
@@ -166,7 +198,7 @@
     
   - Calculate sub-CIDR blocks: http://www.davidc.net/sites/default/subnets/subnets.html
 
-## EC2 | Virtual Cloud Server 
+## EC2 Virtual Cloud Server 
 
 - EC2 Stand for Elastic Compute Cloud . This is a Server that running in one of Amazon's Data Center . EC2 is categorized under Compute Category bcs It is a Service that provide Compute Capacity
 
@@ -299,7 +331,7 @@
  
 #### Jenkinfile Syntax for a Plugin 
 
-- There is a way in Jenkin of seeing pipeline syntax or Jenkinfile syntax : Go to Multi branch Pipeline -> Select Pipeline Syntax -> In the Sample Step I can choose diffent steps that I want to configure -> This case I choose ssh agent -> then I will have a list of credentials available for this project
+There is a way in Jenkin of seeing pipeline syntax or Jenkinfile syntax : Go to Multi branch Pipeline -> Select Pipeline Syntax -> In the Sample Step I can choose diffent steps that I want to configure -> This case I choose ssh agent -> then I will have a list of credentials available for this project
 
 #### Jenkinfile | Connect to EC2 and run Docker command 
 
@@ -515,7 +547,7 @@ stage('commit version update'){
 
 - For more advance use case is Docker-compose isn't enough to manage my container . I gonna need to container Orchestration tools and deploy to that Orchestration tool then will look different than just using sshagent plugin 
 
-## AWS CLI-1 
+## AWS CLI
 
 #### Introduction 
 
