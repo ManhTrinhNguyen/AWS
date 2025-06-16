@@ -10,23 +10,23 @@
 
 - [Deploy to EC2 Server from Jenkins Pipeline CI/CD](#Deploy-to-EC2-Server-from-Jenkins-Pipeline-CI/CD)
 
- - [Install SSH Agent Plugin and Create SSH Credential Type](#Install-SSH-Agent-Plugin-and-Create-SSH-Credential-Type)
-
- - [Jenkinfile Syntax for a Plugin](#Jenkinfile-Syntax-for-a-Plugin)
-
- - [Configure Firewall rule on EC2](#Configure-Firewall-rule-on-EC2)
-
- - [Executing complete Pipeline](#Executing-complete-Pipeline)
-
- - [Using docker-compse](#Using-docker-compse)
-
- - [Extract to Shell Script](#Extract-to-Shell-Script)
-
- - [Replace Docker Image with newly built Version](#Replace-Docker-Image-with-newly-built-Version)
-
- - [Set Image Name dynamically in Jenkinfile](#Set-Image-Name-dynamically-in-Jenkinfile)
-
- - [Commit version update Stage](#Commit-version-update-Stage)
+  - [Install SSH Agent Plugin and Create SSH Credential Type](#Install-SSH-Agent-Plugin-and-Create-SSH-Credential-Type)
+ 
+  - [Jenkinfile Syntax for a Plugin](#Jenkinfile-Syntax-for-a-Plugin)
+ 
+  - [Configure Firewall rule on EC2](#Configure-Firewall-rule-on-EC2)
+ 
+  - [Executing complete Pipeline](#Executing-complete-Pipeline)
+ 
+  - [Using docker-compse](#Using-docker-compse)
+ 
+  - [Extract to Shell Script](#Extract-to-Shell-Script)
+ 
+  - [Replace Docker Image with newly built Version](#Replace-Docker-Image-with-newly-built-Version)
+ 
+  - [Set Image Name dynamically in Jenkinfile](#Set-Image-Name-dynamically-in-Jenkinfile)
+ 
+  - [Commit version update Stage](#Commit-version-update-Stage)
 
 - [AWS CLI](#AWS-CLI)
 
